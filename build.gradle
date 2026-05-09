@@ -1,0 +1,62 @@
+plugins {
+    id 'java'
+    id 'application'
+}
+
+group = 'org.jdesktop.lg3d'
+version = '1.0.0-modern'
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
+}
+
+repositories {
+    mavenCentral()
+    maven {
+        url = uri('https://jcenter.bintray.com/')
+    }
+}
+
+ext {
+    joglVersion = '2.4.0'
+    gluegenVersion = '2.4.0'
+}
+
+dependencies {
+    // JOGL - Modern replacement for Java 3D
+    implementation "org.jogamp:jogl-all:${joglVersion}"
+    implementation "org.jogamp:gluegen-rt:${gluegenVersion}"
+
+    // OpenJFX as alternative (uncomment if using JavaFX)
+    // implementation 'org.openjfx:javafx-base:17.0.2'
+    // implementation 'org.openjfx:javafx-graphics:17.0.2'
+
+    // Testing
+    testImplementation 'junit:junit:4.13.2'
+}
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+    options.compilerArgs << '-Xlint:deprecation'
+}
+
+application {
+    mainClass = 'org.jdesktop.lg3d.displayserver.Main'
+}
+
+test {
+    useJUnit()
+}
+
+// Task to show project info
+task info {
+    doLast {
+        println "LG3D Modern Build Configuration"
+        println "=================================="
+        println "Java Version: ${java.version}"
+        println "Java Source: ${java.sourceCompatibility}"
+        println "Build Tool: Gradle ${gradle.gradleVersion}"
+        println "JOGL Version: ${joglVersion}"
+    }
+}
