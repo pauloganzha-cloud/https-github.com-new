@@ -4,7 +4,7 @@ plugins {
 }
 
 group = 'org.jdesktop.lg3d'
-version = '1.0.0-modern'
+version = '1.0.0'
 
 java {
     sourceCompatibility = JavaVersion.VERSION_17
@@ -13,27 +13,26 @@ java {
 
 repositories {
     mavenCentral()
+    maven { url 'https://jcenter.bintray.com' }
 }
 
 ext {
     joglVersion = '2.4.0-rc'
-    gluegenVersion = '2.4.0-rc'
 }
 
 dependencies {
-    // JOGL - Modern replacement for Java 3D
-    implementation "org.jogamp:jogl-all:${joglVersion}:natives-linux-arm64"
-    implementation "org.jogamp:jogl-all:${joglVersion}:natives-linux-amd64"
-    implementation "org.jogamp:jogl-all:${joglVersion}:natives-win32"
-    implementation "org.jogamp:jogl-all:${joglVersion}:natives-macosx-universal"
-    implementation "org.jogamp:gluegen-rt:${gluegenVersion}"
-    implementation "org.jogamp:gluegen-rt:${gluegenVersion}:natives-linux-arm64"
-    implementation "org.jogamp:gluegen-rt:${gluegenVersion}:natives-linux-amd64"
-    implementation "org.jogamp:gluegen-rt:${gluegenVersion}:natives-win32"
-    implementation "org.jogamp:gluegen-rt:${gluegenVersion}:natives-macosx-universal"
-
-    // For AWT integration
+    // JOGL - OpenGL for Java
     implementation "org.jogamp:jogl-all:${joglVersion}"
+    implementation "org.jogamp:jogl-all:${joglVersion}:natives-linux-amd64"
+    implementation "org.jogamp:jogl-all:${joglVersion}:natives-linux-i586"
+    implementation "org.jogamp:jogl-all:${joglVersion}:natives-win32-amd64"
+    implementation "org.jogamp:jogl-all:${joglVersion}:natives-win32-x86"
+    implementation "org.jogamp:jogl-all:${joglVersion}:natives-macosx-universal"
+
+    implementation "org.jogamp:gluegen-rt:${joglVersion}"
+    implementation "org.jogamp:gluegen-rt:${joglVersion}:natives-linux-amd64"
+    implementation "org.jogamp:gluegen-rt:${joglVersion}:natives-win32-amd64"
+    implementation "org.jogamp:gluegen-rt:${joglVersion}:natives-macosx-universal"
 
     // Testing
     testImplementation 'junit:junit:4.13.2'
@@ -41,8 +40,7 @@ dependencies {
 
 tasks.withType(JavaCompile) {
     options.encoding = 'UTF-8'
-    options.compilerArgs << '-Xlint:deprecation'
-    options.compilerArgs << '-Xlint:unchecked'
+    options.compilerArgs.addAll(['-Xlint:deprecation', '-Xlint:unchecked'])
 }
 
 application {
@@ -53,25 +51,56 @@ test {
     useJUnit()
 }
 
-// Make sure all Java files are compiled
 sourceSets {
     main {
         java {
             srcDirs = ['src/main/java']
         }
     }
+    test {
+        java {
+            srcDirs = ['src/test/java']
+        }
+    }
 }
 
-// Task to show project info
+// Create run tasks for demos
+task runDemo(type: JavaExec) {
+    group = 'application'
+    description = 'Run the basic demo'
+    mainClass = 'org.jdesktop.lg3d.displayserver.DemoLauncher'
+    classpath = sourceSets.main.runtimeClasspath
+}
+
+task runEnhancedDemo(type: JavaExec) {
+    group = 'application'
+    description = 'Run the enhanced demo'
+    mainClass = 'org.jdesktop.lg3d.displayserver.EnhancedDemo'
+    classPath = sourceSets.main.runtimeClasspath
+}
+
+task runFileBrowserDemo(type: JavaExec) {
+    group = 'application'
+    description = 'Run the file browser demo'
+    mainClass = 'org.jdesktop.lg3d.displayserver.FileBrowserDemo'
+    classPath = sourceSets.main.runtimeClasspath
+}
+
 task info {
     doLast {
-        println "========================================"
-        println "  LG3D Modern - Build Configuration"
-        println "========================================"
-        println "Java Version: ${java.version}"
-        println "Java Source:  ${java.sourceCompatibility}"
-        println "Build Tool:   Gradle ${gradle.gradleVersion}"
-        println "JOGL Version: ${joglVersion}"
-        println "========================================"
+        println '========================================'
+        println '  LG3D Modern - Build Configuration'
+        println '========================================'
+        println "Project:       ${project.name}"
+        println "Version:      ${version}"
+        println "Java:         ${java.version}"
+        println "JOGL:         ${joglVersion}"
+        println "Gradle:       ${gradle.gradleVersion}"
+        println '========================================'
+        println 'Run: gradle run         (main app)'
+        println 'Run: gradle runDemo    (basic demo)'
+        println 'Run: gradle runEnhancedDemo'
+        println 'Run: gradle runFileBrowserDemo'
+        println '========================================'
     }
 }

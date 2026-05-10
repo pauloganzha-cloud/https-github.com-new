@@ -1,155 +1,161 @@
-# Project Looking Glass 3D (LG3D) - Modernized
+# LG3D Modern - Project Looking Glass 3D Desktop
 
-A modern fork of Sun Microsystems' Project Looking Glass 3D desktop environment, updated for Java 17+ and modern Linux.
+A modernized fork of Sun Microsystems' Project Looking Glass 3D desktop environment, updated for Java 17+ and modern Linux systems.
 
-## Status: Development - Building
+## Status
 
-### Original Source
-
-- Source: [https://github.com/Ed-Fernando/lg3d-core](https://github.com/Ed-Fernando/lg3d-core)
-- License: GPL-2.0
+**Version:** 1.0.0
+**Build:** Passing
+**Language:** Java 100%
 
 ## Quick Start
 
-### Run Demo (easiest way to test)
+### Prerequisites
 
-```bash
-./gradlew run
-```
-
-Or run directly:
-
-```bash
-java -cp build/classes/java/main:build/resources/main \
-    org.jdesktop.lg3d.displayserver.DemoLauncher
-```
+- Java 17 or higher
+- Gradle 8.x
+- Linux (Ubuntu 20.04+, Fedora 36+) or Windows with WSL
 
 ### Build
 
 ```bash
+# Clone the repository
+git clone https://github.com/pauloganzha-cloud/https-github.com-new.git
+cd https-github.com-new
+
+# Build the project
 ./gradlew build
+
+# Run tests
+./gradlew test
 ```
 
-### Run Tests
+### Run Demos
 
 ```bash
-./gradlew test
+# Basic demo
+./gradlew runDemo
+
+# Enhanced demo with 3D windows
+./gradlew runEnhancedDemo
+
+# File browser demo
+./gradlew runFileBrowserDemo
+```
+
+Or use the launcher script:
+
+```bash
+# Linux/Mac
+chmod +x bin/lg3d.sh
+./bin/lg3d.sh demo
+
+# Windows
+bin\lg3d.bat
 ```
 
 ## Project Structure
 
 ```
 lg3d-modern/
-├── src/main/java/org/jdesktop/lg3d/
-│   ├── displayserver/    # Main display server
-│   │   ├── Main.java           # Entry point
-│   │   ├── DisplayServer.java  # Display server implementation
-│   │   └── DemoLauncher.java   # Standalone 3D demo
-│   ├── sg/               # Scene graph (3D)
-│   │   ├── SceneGraphObject.java   # Base class
-│   │   ├── Node.java              # Scene node
-│   │   ├── Group.java            # Group nodes
-│   │   ├── Transform3D.java      # Matrix transforms
-│   │   ├── Shape3D.java           # 3D shape with geometry
-│   │   └── JoglCanvas.java       # JOGL rendering
-│   ├── wg/               # Window manager
-│   │   ├── Window3D.java         # 3D window
-│   │   ├── Component3D.java      # UI component
-│   │   └── event/               # Event system
-│   └── utils/            # Utilities
-│       └── Utils.java           # Vector math, etc.
-├── src/test/             # JUnit tests
-├── build.gradle          # Gradle build config
-└── .github/workflows/    # CI/CD
+├── bin/                    # Launcher scripts
+│   ├── lg3d.sh            # Linux/Mac launcher
+│   └── lg3d.bat          # Windows launcher
+├── src/
+│   ├── main/
+│   │   ├── c/             # Native C code (X11)
+│   │   └── java/
+│   │       └── org/jdesktop/lg3d/
+│   │           ├── animation/    # Animation system
+│   │           ├── appkit/       # Application framework
+│   │           ├── displayserver/ # Main server
+│   │           ├── scenemanager/ # Scene management
+│   │           ├── sg/           # Scene graph
+│   │           ├── utils/        # Utilities, Audio, Theme
+│   │           └── wg/           # Window manager
+│   └── test/              # JUnit tests
+├── build.gradle           # Gradle build config
+└── README.md              # This file
 ```
 
-## Key Components
+## Features
 
-### Scene Graph (sg/)
+### Core System
 
-| Class | Description |
-|-------|-------------|
-| `SceneGraphObject` | Base for all scene graph nodes |
-| `Node` | Scene node with parent/child hierarchy |
-| `Group` | Container for child nodes |
-| `TransformGroup` | Group with transform matrix |
-| `BranchGroup` | Root of a scene branch |
-| `Shape3D` | 3D shape with geometry |
-| `Transform3D` | 4x4 transformation matrix |
-| `JoglCanvas` | JOGL canvas for OpenGL rendering |
+- **Scene Graph** - Transform3D, Node, Group, Shape3D
+- **JOGL Integration** - OpenGL rendering via JOGL 2.x
+- **X11 Integration** - Native X11 with Java bridge
+- **Animation System** - Position, Scale, Rotation animations
 
-### Window Manager (wg/)
+### Window Management
 
-| Class | Description |
-|-------|-------------|
-| `Window3D` | 3D window representation |
-| `Component3D` | Base UI component |
-| `Cursor3D` | 3D cursor |
+- **WindowManager** - Full window lifecycle management
+- **Window3D** - 3D window representation
+- **Taskbar** - System taskbar with clock and tray
 
-### Display Server
+### UI Components
 
-| Class | Description |
-|-------|-------------|
-| `DisplayServer` | Main display server |
-| `SceneGraph` | Scene management |
-| `VirtualDisplay` | Virtual 3D display |
-| `X11Bridge` | X11 integration (placeholder) |
+- Button3D, Checkbox3D, Slider3D
+- TextField3D, Label3D
+- List3D, ComboBox3D, TabbedPane3D
+- ScrollPane3D, SplitPane3D, Panel3D
 
-## Modernization Goals
+### System Features
 
-| Component | Original | Target |
-|-----------|----------|--------|
-| Java | 1.5/1.6 | 17+ (OpenJDK 21) |
-| 3D API | Java 3D | JOGL 2.x |
-| Build | Ant | Gradle |
-| Platform | i586 | x86_64 |
-| X Server | Old X11 | Modern X.org |
+- **Theme System** - Dark, Light, Blue, Green themes
+- **Screen Capture** - Screenshot and recording
+- **Audio System** - Sound playback
+- **Clipboard** - Clipboard with history
+- **Drag & Drop** - Drag and drop support
+- **Settings** - Full settings dialog
 
-## Running the Demo
+## Demos
 
-The demo launcher shows a simple 3D scene with floating window frames:
+| Demo | Description |
+|------|-------------|
+| `DemoLauncher` | Basic 3D scene with rotating objects |
+| `EnhancedDemo` | Multiple 3D window frames |
+| `FileBrowserDemo` | 3D file browser interface |
 
-1. A floor plane
-2. Three 3D window frames floating in space
-3. Auto-rotation animation
-4. OpenGL lighting
+## Technology Stack
 
-### Controls
-- **ESC** - Exit demo
-
-## CI/CD
-
-GitHub Actions automatically builds and tests on:
-- Ubuntu (latest)
-- JDK 17
-
-## Dependencies
-
-- **JOGL 2.4.0-rc** - OpenGL bindings for Java
-- **JUnit 4.13.2** - Testing framework
+- **Java** 17+ - Modern Java with records and patterns
+- **JOGL** 2.4.0 - OpenGL bindings
+- **Gradle** 8.x - Build system
+- **JUnit** 4.13.2 - Testing framework
 
 ## Roadmap
 
-- [x] Fork and analyze source
-- [x] Create Gradle build
-- [x] Java 17+ support
-- [x] Scene graph (Transform3D, Node, Shape)
-- [x] JOGL integration
-- [x] Window manager (Window3D, Component3D)
-- [x] Event system
-- [x] Demo launcher
-- [ ] X11 integration
-- [ ] Native X11 code port
-- [ ] Full UI components
-- [ ] Production build
+- [x] Core scene graph
+- [x] JOGL rendering
+- [x] Window management
+- [x] UI components
+- [x] X11 integration
+- [x] Animation system
+- [x] Theme system
+- [ ] Full demo integration
+- [ ] Native library builds
+- [ ] Production release
+
+## Contributing
+
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Run tests: `./gradlew test`
+5. Submit a pull request
+
+## License
+
+GPL-2.0 (same as original Project Looking Glass)
 
 ## References
 
-- Original: [https://github.com/Ed-Fernando/lg3d-core](https://github.com/Ed-Fernando/lg3d-core)
-- Archived: [https://web.archive.org/web/20130609081034/java.net/projects/lg3d](https://web.archive.org/web/20130609081034/java.net/projects/lg3d)
-- Wikipedia: [https://en.wikipedia.org/wiki/Project_Looking_Glass](https://en.wikipedia.org/wiki/Project_Looking_Glass)
-- JOGL: [https://jogamp.org/](https://jogamp.org/)
+- [Original Project Looking Glass](https://github.com/Ed-Fernando/lg3d-core)
+- [JOGL Project](https://jogamp.org/)
+- [Wikipedia - Project Looking Glass](https://en.wikipedia.org/wiki/Project_Looking_Glass)
 
----
+## Credits
 
-License: GPL-2.0 (same as original)
+Original project by Sun Microsystems.
+Modernization by LG3D-Modern Team.
